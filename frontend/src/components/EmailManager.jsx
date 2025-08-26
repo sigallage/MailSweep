@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { RefreshCw, Trash2, Mail, User, Calendar, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { RefreshCw, Trash2, Mail, User, Calendar, CheckCircle, AlertCircle, Loader2, Search, X } from 'lucide-react'
 import axios from 'axios'
 
 const API_BASE = 'http://localhost:3000'
@@ -10,6 +10,7 @@ export default function EmailManager() {
   const [loading, setLoading] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [status, setStatus] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const loadEmails = async () => {
     setLoading(true)
@@ -109,6 +110,18 @@ export default function EmailManager() {
     return total + (sender ? sender.count : 0)
   }, 0)
 
+  // Filter senders based on search term
+  const filteredSenders = senders.filter(sender => {
+    const searchLower = searchTerm.toLowerCase()
+    return (
+      sender.sender.toLowerCase().includes(searchLower) ||
+      sender.email.toLowerCase().includes(searchLower) ||
+      sender.messageIds.some(msg => 
+        msg.subject && msg.subject.toLowerCase().includes(searchLower)
+      )
+    )
+  })
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -135,6 +148,41 @@ export default function EmailManager() {
           )}
         </button>
       </div>
+
+      {/* Search Bar */}
+      {senders.length > 0 && (
+        <div className="card">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted" />
+            <input
+              type="text"
+              placeholder="Search senders by name, email, or subject..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input w-full pl-10 pr-10"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted hover:text-primary transition-colors"
+                title="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+          {searchTerm && (
+            <div className="mt-2 text-sm text-secondary">
+              Showing {filteredSenders.length} of {senders.length} senders
+              {filteredSenders.length !== senders.length && (
+                <span className="ml-2">
+                  ({senders.length - filteredSenders.length} hidden)
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Status */}
       {status && (
@@ -208,10 +256,24 @@ export default function EmailManager() {
 
       {!loading && senders.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Emails by Sender ({senders.length} senders)</h3>
+          <h3 className="text-lg font-semibold">
+            Emails by Sender ({filteredSenders.length} of {senders.length} senders)
+          </h3>
           
-          <div className="space-y-3">
-            {senders.map((sender) => (
+          {filteredSenders.length === 0 ? (
+            <div className="text-center py-8">
+              <Search className="w-12 h-12 mx-auto mb-4 text-muted" />
+              <p className="text-secondary">No senders match your search.</p>
+              <button
+                onClick={() => setSearchTerm('')}
+                className="btn btn-secondary mt-4"
+              >
+                Clear Search
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filteredSenders.map((sender) => (
               <div
                 key={sender.email}
                 className={`card transition-all cursor-pointer ${
@@ -264,7 +326,8 @@ export default function EmailManager() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>
