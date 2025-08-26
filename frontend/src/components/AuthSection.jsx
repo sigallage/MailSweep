@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LogIn, KeyRound, CheckCircle, AlertCircle } from 'lucide-react'
+import { LogIn, KeyRound, CheckCircle, AlertCircle, Copy, ArrowRight } from 'lucide-react'
 import axios from 'axios'
 
 const API_BASE = 'http://localhost:3000'
@@ -8,6 +8,7 @@ export default function AuthSection({ onAuthSuccess, authStatus, setAuthStatus }
   const [showCodeInput, setShowCodeInput] = useState(false)
   const [authCode, setAuthCode] = useState('')
   const [loading, setLoading] = useState(false)
+  const [copySuccess, setCopySuccess] = useState(false)
 
   const handleAuth = async () => {
     setLoading(true)
@@ -56,6 +57,16 @@ export default function AuthSection({ onAuthSuccess, authStatus, setAuthStatus }
     }
   }
 
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(authCode)
+      setCopySuccess(true)
+      setTimeout(() => setCopySuccess(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy text: ', err)
+    }
+  }
+
   return (
     <div className="max-w-md mx-auto">
       <div className="card">
@@ -99,16 +110,33 @@ export default function AuthSection({ onAuthSuccess, authStatus, setAuthStatus }
                 <KeyRound className="w-4 h-4 inline mr-1" />
                 Authorization Code
               </label>
-              <input
-                id="authCode"
-                type="text"
-                value={authCode}
-                onChange={(e) => setAuthCode(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Paste the authorization code here"
-                className="input"
-                disabled={loading}
-              />
+              <div className="flex gap-2">
+                <input
+                  id="authCode"
+                  type="text"
+                  value={authCode}
+                  onChange={(e) => setAuthCode(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Paste the authorization code here"
+                  className="input flex-1"
+                  disabled={loading}
+                />
+                <button
+                  onClick={copyToClipboard}
+                  disabled={!authCode.trim()}
+                  className="btn btn-secondary flex items-center justify-center px-3"
+                  title="Copy authorization code"
+                >
+                  {copySuccess ? (
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                  ) : (
+                    <Copy className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+              {copySuccess && (
+                <p className="text-sm text-green-600 mt-1">Code copied to clipboard!</p>
+              )}
             </div>
             
             <button
@@ -127,6 +155,15 @@ export default function AuthSection({ onAuthSuccess, authStatus, setAuthStatus }
                   Submit Code
                 </>
               )}
+            </button>
+            
+            <button
+              onClick={() => window.location.reload()}
+              className="btn btn-outline w-full flex items-center justify-center gap-2"
+              disabled={loading}
+            >
+              <ArrowRight className="w-4 h-4" />
+              Continue to Dashboard
             </button>
           </div>
         )}

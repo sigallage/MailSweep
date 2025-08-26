@@ -122,6 +122,17 @@ body {
   transform: translateY(-1px);
 }
 
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  border-color: var(--border-secondary);
+}
+
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
