@@ -30,27 +30,39 @@ function App() {
         </header>
 
         {/* Features */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="card text-center group">
-            <div className="p-3 bg-gradient-to-br from-accent to-accent-secondary rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform duration-300">
-              <Shield className="w-8 h-8 text-white" />
+        <div className="grid md:grid-cols-3 gap-10 mb-20">
+          <div className="feature-card group">
+            <div className="feature-icon-wrapper">
+              <Shield className="w-10 h-10 text-white" />
             </div>
-            <h3 className="font-semibold mb-3 text-lg">Enterprise Security</h3>
-            <p className="text-secondary text-sm leading-relaxed">OAuth 2.0 authentication with Google's enterprise-grade security protocols</p>
+            <div className="feature-content">
+              <h3 className="feature-title">Enterprise Security</h3>
+              <p className="feature-description">
+                OAuth 2.0 authentication with Google's enterprise-grade security protocols ensuring your data remains protected
+              </p>
+            </div>
           </div>
-          <div className="card text-center group">
-            <div className="p-3 bg-gradient-to-br from-accent to-accent-secondary rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform duration-300">
-              <Users className="w-8 h-8 text-white" />
+          <div className="feature-card group">
+            <div className="feature-icon-wrapper">
+              <Users className="w-10 h-10 text-white" />
             </div>
-            <h3 className="font-semibold mb-3 text-lg">Smart Organization</h3>
-            <p className="text-secondary text-sm leading-relaxed">Intelligent email grouping by sender with advanced filtering capabilities</p>
+            <div className="feature-content">
+              <h3 className="feature-title">Smart Organization</h3>
+              <p className="feature-description">
+                Intelligent email grouping by sender with advanced filtering capabilities and search functionality
+              </p>
+            </div>
           </div>
-          <div className="card text-center group">
-            <div className="p-3 bg-gradient-to-br from-accent to-accent-secondary rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform duration-300">
-              <Trash2 className="w-8 h-8 text-white" />
+          <div className="feature-card group">
+            <div className="feature-icon-wrapper">
+              <Trash2 className="w-10 h-10 text-white" />
             </div>
-            <h3 className="font-semibold mb-3 text-lg">Bulk Operations</h3>
-            <p className="text-secondary text-sm leading-relaxed">Efficient mass deletion with comprehensive safety confirmations</p>
+            <div className="feature-content">
+              <h3 className="feature-title">Bulk Operations</h3>
+              <p className="feature-description">
+                Efficient mass deletion with comprehensive safety confirmations and detailed progress tracking
+              </p>
+            </div>
           </div>
         </div>
 
