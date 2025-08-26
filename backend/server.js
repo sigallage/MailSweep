@@ -57,10 +57,8 @@ app.get('/auth/callback', async (req, res) => {
       return res.status(400).send('Authorization code not found');
     }
     
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
-    
-    // Send success page or redirect to frontend
+    // Don't exchange the code yet - just display it for the user to copy
+    // The actual token exchange will happen in the POST route
     res.send(`
       <html>
         <head>

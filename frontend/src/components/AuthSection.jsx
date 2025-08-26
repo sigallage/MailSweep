@@ -45,7 +45,11 @@ export default function AuthSection({ onAuthSuccess, authStatus, setAuthStatus }
       }
     } catch (error) {
       console.error('Code submission error:', error)
-      setAuthStatus('Failed to authenticate. Please try again.')
+      if (error.response && error.response.status === 500) {
+        setAuthStatus('Authentication failed. The authorization code may have expired or already been used. Please try the process again.')
+      } else {
+        setAuthStatus('Failed to authenticate. Please try again.')
+      }
     }
     setLoading(false)
   }
