@@ -30,16 +30,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    message: 'MailPurge Backend API is running',
-    timestamp: new Date().toISOString(),
-    version: '1.0.0'
-  });
-});
-
 // Get authorization URL
 app.get('/auth', (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({

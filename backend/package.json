@@ -1,7 +1,7 @@
 {
-  "name": "email-deleter",
+  "name": "mailpurge-backend",
   "version": "1.0.0",
-  "description": "Auto email deleter - bulk delete emails from specific senders",
+  "description": "MailPurge backend - Auto email deleter API with Gmail integration",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
