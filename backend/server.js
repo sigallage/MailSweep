@@ -44,7 +44,7 @@ app.get('/health', (req, res) => {
 app.get('/auth', (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
-    scope: ['https://www.googleapis.com/auth/gmail.modify']
+    scope: ['https://mail.google.com/']
   });
   res.json({ authUrl });
 });
@@ -275,7 +275,20 @@ app.post('/emails/delete', async (req, res) => {
     });
   } catch (error) {
     console.error('Error deleting emails:', error);
-    res.status(500).json({ error: 'Failed to delete emails' });
+    
+    if (error.status === 403 || error.code === 403) {
+      res.status(403).json({ 
+        error: 'Insufficient permissions to delete emails. Please re-authorize the application with full Gmail access.',
+        needsReauth: true 
+      });
+    } else if (error.status === 401 || error.code === 401) {
+      res.status(401).json({ 
+        error: 'Authentication expired. Please re-authorize the application.',
+        needsReauth: true 
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to delete emails. Please try again.' });
+    }
   }
 });
 

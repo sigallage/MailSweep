@@ -80,7 +80,16 @@ export default function EmailManager() {
       }
     } catch (error) {
       console.error('Delete error:', error)
-      setStatus('Failed to delete emails. Please try again.')
+      
+      if (error.response && error.response.status === 403) {
+        setStatus('Permission denied. Please re-authorize the application with full Gmail access.')
+      } else if (error.response && error.response.status === 401) {
+        setStatus('Authentication expired. Please re-authorize the application.')
+      } else if (error.response && error.response.data && error.response.data.error) {
+        setStatus('Failed to delete emails: ' + error.response.data.error)
+      } else {
+        setStatus('Failed to delete emails. Please try again.')
+      }
     }
     setDeleting(false)
   }
