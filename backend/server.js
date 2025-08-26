@@ -63,14 +63,107 @@ app.get('/auth/callback', async (req, res) => {
     // Send success page or redirect to frontend
     res.send(`
       <html>
-        <head><title>MailPurge - Authorization Success</title></head>
-        <body style="font-family: Arial; text-align: center; padding: 50px; background: #0a0a0b; color: white;">
-          <h1 style="color: #22c55e;">✅ Authorization Successful!</h1>
-          <p>You can now close this window and return to the MailPurge application.</p>
-          <p>Authorization code: <code style="background: #1f1f23; padding: 5px; border-radius: 4px;">${code}</code></p>
+        <head>
+          <title>MailPurge - Authorization Success</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              text-align: center;
+              padding: 50px;
+              background: #0a0a0b;
+              color: white;
+              margin: 0;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+            }
+            h1 {
+              color: #22c55e;
+              margin-bottom: 20px;
+            }
+            .code-container {
+              margin: 30px 0;
+              padding: 20px;
+              background: #1f1f23;
+              border-radius: 8px;
+              border: 1px solid #333;
+            }
+            .code-text {
+              background: #2a2a2e;
+              padding: 15px;
+              border-radius: 4px;
+              font-family: 'Courier New', monospace;
+              word-break: break-all;
+              margin-bottom: 15px;
+              font-size: 14px;
+            }
+            .copy-btn {
+              background: #3b82f6;
+              color: white;
+              border: none;
+              padding: 10px 20px;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 14px;
+              transition: background-color 0.2s;
+            }
+            .copy-btn:hover {
+              background: #2563eb;
+            }
+            .copy-btn:active {
+              background: #1d4ed8;
+            }
+            .success-message {
+              color: #22c55e;
+              margin-top: 10px;
+              opacity: 0;
+              transition: opacity 0.3s;
+            }
+            .success-message.show {
+              opacity: 1;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>✅ Authorization Successful!</h1>
+            <p>You can now close this window and return to the MailPurge application.</p>
+            
+            <div class="code-container">
+              <label style="display: block; margin-bottom: 10px; font-weight: bold;">Authorization code:</label>
+              <div class="code-text" id="authCode">${code}</div>
+              <button class="copy-btn" onclick="copyCode()">
+                📋 Copy Code
+              </button>
+              <div class="success-message" id="successMessage">✅ Code copied to clipboard!</div>
+            </div>
+          </div>
+          
           <script>
-            // Auto-close window after 3 seconds
-            setTimeout(() => window.close(), 3000);
+            function copyCode() {
+              const codeElement = document.getElementById('authCode');
+              const successMessage = document.getElementById('successMessage');
+              
+              // Create a temporary textarea to copy the text
+              const textarea = document.createElement('textarea');
+              textarea.value = codeElement.textContent;
+              document.body.appendChild(textarea);
+              textarea.select();
+              document.execCommand('copy');
+              document.body.removeChild(textarea);
+              
+              // Show success message
+              successMessage.classList.add('show');
+              
+              // Hide success message after 2 seconds
+              setTimeout(() => {
+                successMessage.classList.remove('show');
+              }, 2000);
+            }
+            
+            // Auto-close window after 30 seconds (increased time for user to copy)
+            setTimeout(() => window.close(), 30000);
           </script>
         </body>
       </html>
