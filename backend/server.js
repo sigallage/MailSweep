@@ -49,7 +49,48 @@ app.get('/auth', (req, res) => {
   res.json({ authUrl });
 });
 
-// Handle OAuth callback
+// Handle OAuth callback (GET - from Google redirect)
+app.get('/auth/callback', async (req, res) => {
+  try {
+    const { code } = req.query;
+    if (!code) {
+      return res.status(400).send('Authorization code not found');
+    }
+    
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
+    
+    // Send success page or redirect to frontend
+    res.send(`
+      <html>
+        <head><title>MailPurge - Authorization Success</title></head>
+        <body style="font-family: Arial; text-align: center; padding: 50px; background: #0a0a0b; color: white;">
+          <h1 style="color: #22c55e;">✅ Authorization Successful!</h1>
+          <p>You can now close this window and return to the MailPurge application.</p>
+          <p>Authorization code: <code style="background: #1f1f23; padding: 5px; border-radius: 4px;">${code}</code></p>
+          <script>
+            // Auto-close window after 3 seconds
+            setTimeout(() => window.close(), 3000);
+          </script>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('Error during authentication:', error);
+    res.status(500).send(`
+      <html>
+        <head><title>MailPurge - Authorization Error</title></head>
+        <body style="font-family: Arial; text-align: center; padding: 50px; background: #0a0a0b; color: white;">
+          <h1 style="color: #ef4444;">❌ Authorization Failed</h1>
+          <p>There was an error during authentication. Please try again.</p>
+          <p>Error: ${error.message}</p>
+        </body>
+      </html>
+    `);
+  }
+});
+
+// Handle OAuth callback (POST - from frontend)
 app.post('/auth/callback', async (req, res) => {
   try {
     const { code } = req.body;
