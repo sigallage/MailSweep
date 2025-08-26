@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Deleter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📧 Auto Email Deleter</h1>
+            <p>Delete all emails from specific senders in one click</p>
+        </header>
+
+        <div id="auth-section" class="section">
+            <h2>1. Connect Your Gmail</h2>
+            <button id="auth-btn" class="btn btn-primary">Connect Gmail Account</button>
+            <div id="auth-status" class="status"></div>
+        </div>
+
+        <div id="code-section" class="section hidden">
+            <h2>2. Enter Authorization Code</h2>
+            <input type="text" id="auth-code" placeholder="Paste authorization code here" />
+            <button id="submit-code-btn" class="btn btn-secondary">Submit Code</button>
+        </div>
+
+        <div id="emails-section" class="section hidden">
+            <h2>3. Select Senders to Delete</h2>
+            <button id="load-emails-btn" class="btn btn-secondary">Load Emails</button>
+            <div id="loading" class="hidden">Loading emails...</div>
+            
+            <div id="senders-list" class="senders-container"></div>
+            
+            <div id="delete-section" class="hidden">
+                <button id="delete-selected-btn" class="btn btn-danger">Delete Selected Emails</button>
+                <div id="delete-status" class="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
