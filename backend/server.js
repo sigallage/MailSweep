@@ -125,16 +125,16 @@ app.get('/auth/callback', async (req, res) => {
         </head>
         <body>
           <div class="container">
-            <h1>✅ Authorization Successful!</h1>
-            <p>You can now close this window and return to the MailPurge application.</p>
+            <h1>Authorization Successful</h1>
+            <p>You can now close this window and return to the MailSweeper application.</p>
             
             <div class="code-container">
               <label style="display: block; margin-bottom: 10px; font-weight: bold;">Authorization code:</label>
               <div class="code-text" id="authCode">${code}</div>
               <button class="copy-btn" onclick="copyCode()">
-                📋 Copy Code
+                Copy Code
               </button>
-              <div class="success-message" id="successMessage">✅ Code copied to clipboard!</div>
+              <div class="success-message" id="successMessage">Code copied to clipboard!</div>
             </div>
           </div>
           
@@ -194,6 +194,31 @@ app.post('/auth/callback', async (req, res) => {
   }
 });
 
+// Check authentication status
+app.get('/auth/status', (req, res) => {
+  try {
+    const credentials = oauth2Client.credentials;
+    if (credentials && credentials.access_token) {
+      res.json({ 
+        authenticated: true, 
+        message: 'User is authenticated',
+        hasScope: true // We'll assume the scope is correct if authenticated
+      });
+    } else {
+      res.json({ 
+        authenticated: false, 
+        message: 'User is not authenticated' 
+      });
+    }
+  } catch (error) {
+    console.error('Error checking auth status:', error);
+    res.json({ 
+      authenticated: false, 
+      message: 'Authentication status unknown' 
+    });
+  }
+});
+
 // Get emails grouped by sender
 app.get('/emails/senders', async (req, res) => {
   try {
@@ -247,7 +272,20 @@ app.get('/emails/senders', async (req, res) => {
     res.json(senders);
   } catch (error) {
     console.error('Error fetching emails:', error);
-    res.status(500).json({ error: 'Failed to fetch emails' });
+    
+    if (error.status === 401 || error.code === 401) {
+      res.status(401).json({ 
+        error: 'Authentication expired. Please re-authorize the application.',
+        needsReauth: true 
+      });
+    } else if (error.status === 403 || error.code === 403) {
+      res.status(403).json({ 
+        error: 'Insufficient permissions. Please re-authorize with full Gmail access.',
+        needsReauth: true 
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to fetch emails. Please try again.' });
+    }
   }
 });
 

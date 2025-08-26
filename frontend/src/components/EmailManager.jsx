@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const API_BASE = 'http://localhost:3000'
 
-export default function EmailManager() {
+export default function EmailManager({ onAuthError }) {
   const [senders, setSenders] = useState([])
   const [selectedSenders, setSelectedSenders] = useState(new Set())
   const [loading, setLoading] = useState(false)
@@ -24,7 +24,14 @@ export default function EmailManager() {
       }
     } catch (error) {
       console.error('Error loading emails:', error)
-      setStatus('Failed to load emails. Please try again.')
+      if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        setStatus('Authentication expired or insufficient permissions. Please re-authorize.')
+        if (onAuthError) {
+          setTimeout(() => onAuthError(), 2000) // Give user time to read the message
+        }
+      } else {
+        setStatus('Failed to load emails. Please try again.')
+      }
     }
     setLoading(false)
   }
@@ -84,8 +91,14 @@ export default function EmailManager() {
       
       if (error.response && error.response.status === 403) {
         setStatus('Permission denied. Please re-authorize the application with full Gmail access.')
+        if (onAuthError) {
+          setTimeout(() => onAuthError(), 3000) // Give user time to read the message
+        }
       } else if (error.response && error.response.status === 401) {
         setStatus('Authentication expired. Please re-authorize the application.')
+        if (onAuthError) {
+          setTimeout(() => onAuthError(), 3000) // Give user time to read the message
+        }
       } else if (error.response && error.response.data && error.response.data.error) {
         setStatus('Failed to delete emails: ' + error.response.data.error)
       } else {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LogIn, KeyRound, CheckCircle, AlertCircle } from 'lucide-react'
+import { LogIn, KeyRound, CheckCircle, AlertCircle, Shield } from 'lucide-react'
 import axios from 'axios'
 
 const API_BASE = 'http://localhost:3000'
@@ -92,7 +92,10 @@ export default function AuthSection({ onAuthSuccess, authStatus, setAuthStatus }
             </button>
             
             <div className="text-xs text-muted text-center">
-              <p>🔒 Secure OAuth 2.0 authentication</p>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Shield className="w-3 h-3" />
+                <span>Secure OAuth 2.0 authentication</span>
+              </div>
               <p>We only request minimal permissions to read and delete emails</p>
             </div>
           </div>
