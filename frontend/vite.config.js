@@ -13,5 +13,19 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
-  }
+  },
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
 })
