@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { RefreshCw, Trash2, Mail, User, Calendar, CheckCircle, AlertCircle, Loader2, Search, X } from 'lucide-react'
 import axios from 'axios'
 
-const API_BASE = 'http://localhost:3000'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
 
 export default function EmailManager({ onAuthError }) {
   const [senders, setSenders] = useState([])
