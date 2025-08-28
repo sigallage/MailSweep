@@ -4,19 +4,18 @@
   "description": "MailPurge backend - Auto email deleter API with Gmail integration",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node --disable-warning=DEP0040 server.js",
+    "dev": "node --disable-warning=DEP0040 server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["email", "deleter", "gmail", "automation"],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "googleapis": "^126.0.1",
+    "express": "^4.21.2",
+    "googleapis": "^144.0.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "path": "^0.12.7"
+    "dotenv": "^16.4.7"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
