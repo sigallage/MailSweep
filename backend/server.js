@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
+    console.log('CORS request from origin:', origin);
+    
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
@@ -19,14 +21,21 @@ app.use(cors({
       'https://mail-sweep-frontend.vercel.app',
       'https://mailsweeper-frontend.vercel.app',
       'https://mailsweeper.vercel.app',
+      'https://www.mailsweeper.live',
+      'https://mailsweeper.live',
       process.env.FRONTEND_URL
     ].filter(Boolean); // Remove undefined values
     
+    console.log('Allowed origins:', allowedOrigins);
+    console.log('Environment FRONTEND_URL:', process.env.FRONTEND_URL);
+    
     // Check if origin is in allowed list or is a Vercel domain
     if (allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+      console.log('CORS allowed for origin:', origin);
       return callback(null, true);
     }
     
+    console.log('CORS blocked for origin:', origin);
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
