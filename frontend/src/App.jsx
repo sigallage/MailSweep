@@ -14,13 +14,11 @@ function App() {
         {/* Header */}
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="p-4 bg-gradient-to-br from-accent to-accent-secondary rounded-2xl shadow-lg">
-              <img 
-                src="/MailSweepIcon.png" 
-                alt="MailSweeper Icon" 
-                className="w-10 h-10 object-contain"
-              />
-            </div>
+            <img 
+              src="/MailSweepIcon.png" 
+              alt="MailSweeper Icon" 
+              className="w-8 h-8 object-contain"
+            />
             <div>
               <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 MailSweeper
