@@ -17,7 +17,7 @@ function App() {
             <img 
               src="/MailSweepIcon.png" 
               alt="MailSweeper Icon" 
-              className="w-8 h-8 object-contain"
+              className="w-12 h-12 object-contain"
             />
             <div>
               <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
