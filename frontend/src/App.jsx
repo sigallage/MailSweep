@@ -90,6 +90,28 @@ function App() {
               This application permanently deletes emails from your Gmail account. Use with caution.
             </p>
           </div>
+          
+          {/* Navigation Links */}
+          <div className="flex justify-center gap-6 mb-4">
+            <a 
+              href="/privacy-policy.html" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-secondary hover:text-accent transition-colors duration-200 text-sm underline"
+            >
+              Privacy Policy
+            </a>
+            <span className="text-muted">•</span>
+            <a 
+              href="/terms-of-service.html" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-secondary hover:text-accent transition-colors duration-200 text-sm underline"
+            >
+              Terms of Service
+            </a>
+          </div>
+          
           <p className="text-muted text-xs">
             Built with React + Vite • Powered by Gmail API
           </p>
